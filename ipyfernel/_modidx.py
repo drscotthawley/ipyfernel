@@ -2,7 +2,7 @@
 
 d = { 'settings': { 'branch': 'main',
                 'doc_baseurl': '/ipyfernel',
-                'doc_host': 'https://shawley.github.io',
-                'git_url': 'https://github.com/shawley/ipyfernel',
+                'doc_host': 'https://drscotthawley.github.io',
+                'git_url': 'https://github.com/drscotthawley/ipyfernel',
                 'lib_path': 'ipyfernel'},
   'syms': {'ipyfernel.core': {'ipyfernel.core.foo': ('core.html#foo', 'ipyfernel/core.py')}}}

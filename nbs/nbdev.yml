@@ -3,7 +3,7 @@ project:
 
 website:
   title: "ipyfernel"
-  site-url: "https://shawley.github.io/ipyfernel"
+  site-url: "https://drscotthawley.github.io/ipyfernel"
   description: "Remote execution of solveit/jupyter cells"
   repo-branch: main
-  repo-url: "https://github.com/shawley/ipyfernel"
+  repo-url: "https://github.com/drscotthawley/ipyfernel"
