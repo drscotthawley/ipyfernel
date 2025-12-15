@@ -15,7 +15,7 @@ that cells execute remotely by default.
 
 It’s a remote kernel, so this is a play on words: `ipykernel` + the
 German word/prefix “fern” meaning “remote”. Plus it sounds a bit like
-“infernal,” which is 🔥
+“infernal.” 🔥
 
 ## Developer Guide
 
