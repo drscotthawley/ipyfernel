@@ -56,7 +56,7 @@ Host {alias}
         config_path.write_text("\n".join(lines) + "\n")
     print(f'{config_path} file updated.') 
 
-# %% ../nbs/00_core.ipynb 11
+# %% ../nbs/00_core.ipynb 12
 def register_remote_kernel(
     kernel_name="ipyf_remote_kernel",  # Any old name will do. This is fine.
     display_name="Remote Python",      # This is just what you'll see when you look at a list.
@@ -79,7 +79,7 @@ def register_remote_kernel(
         if verbose: print("Success.")
 
 
-# %% ../nbs/00_core.ipynb 13
+# %% ../nbs/00_core.ipynb 14
 _ipf_km, _ipf_kc = None, None            # "ipf" = "ipyfernel" ;-) 
 def ipf_startup(kernel_name="ipyf_remote_kernel"):  
     "Start up the remote kernel"
@@ -94,7 +94,7 @@ def ipf_startup(kernel_name="ipyf_remote_kernel"):
     else: 
         print("ipf_startup: already running")
 
-# %% ../nbs/00_core.ipynb 15
+# %% ../nbs/00_core.ipynb 16
 def _output_hook(
     msg,   #  Message obtained from remote execution
     ):
@@ -112,7 +112,7 @@ def _output_hook(
         elif "text/plain" in data:
             print(data["text/plain"])
 
-# %% ../nbs/00_core.ipynb 16
+# %% ../nbs/00_core.ipynb 17
 def ipf_exec(
     code:str,           # Code to be executed
     verbose=False,      # Return details about remote execution.
@@ -123,7 +123,7 @@ def ipf_exec(
     _ipf_kc.last_result = result  # stash it for optional inspection later
     if verbose: return result
 
-# %% ../nbs/00_core.ipynb 18
+# %% ../nbs/00_core.ipynb 19
 def ipf_shutdown(verbose=True):
     "Terminates the remote kernel"
     global _ipf_km, _ipf_kc
@@ -134,7 +134,7 @@ def ipf_shutdown(verbose=True):
     except: pass  # Don't hang on errors
     _ipf_km, _ipf_kc = None, None
 
-# %% ../nbs/00_core.ipynb 21
+# %% ../nbs/00_core.ipynb 22
 def _execute_remotely(lines:list[str]):
     "Take commands from magics and send to ipf_exec"
     code = ''.join(lines)
@@ -144,7 +144,7 @@ def _execute_remotely(lines:list[str]):
         return lines
     return [f"ipf_exec({repr(code)})\n"]
 
-# %% ../nbs/00_core.ipynb 22
+# %% ../nbs/00_core.ipynb 23
 @register_line_magic
 def set_remote(line:str):
     """Setup connection to remote server, start remote server, and enable 'sticky' remote execution of code cells (even without magics).
@@ -159,26 +159,26 @@ def set_remote(line:str):
         print(f"Error starting up remote kernel: {e}") 
         return 
 
-# %% ../nbs/00_core.ipynb 24
+# %% ../nbs/00_core.ipynb 25
 @register_line_cell_magic
 def remote(line, cell=None):
     "remote exeuction: works as %remote and as %%remote" 
     ipf_exec(cell if cell else line)
 
-# %% ../nbs/00_core.ipynb 26
+# %% ../nbs/00_core.ipynb 27
 @register_line_cell_magic
 def local(line, cell=None):
     "local execution: works as %local and as %%local"
     get_ipython().run_cell(cell if cell else line) 
 
-# %% ../nbs/00_core.ipynb 28
+# %% ../nbs/00_core.ipynb 29
 @register_line_magic
 def unset_remote(_):
     "shutdown remote server"
     unset_sticky('')  # get rid of any input transformers (see below) 
     ipf_shutdown()
 
-# %% ../nbs/00_core.ipynb 30
+# %% ../nbs/00_core.ipynb 31
 gip = get_ipython()
 
 @register_line_magic
@@ -192,7 +192,7 @@ def set_sticky(_):
     gip.input_transformers_cleanup.append(_execute_remotely)
     print('Code cells will now execute remotely.')
 
-# %% ../nbs/00_core.ipynb 31
+# %% ../nbs/00_core.ipynb 32
 @register_line_magic
 def unset_sticky(_):
     "Un-sticks remote execution for code cells" 
