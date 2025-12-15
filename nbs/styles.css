@@ -90,3 +90,13 @@ div.description {
 }
 
 
+/* TOC anchor links */
+#TOC a, .toc-actions a, #quarto-margin-sidebar a {
+  color: #e67e22 !important;
+}
+
+#TOC a:hover, .toc-actions a:hover, #quarto-margin-sidebar a:hover {
+  color: #f1c40f !important;
+}
+
+
