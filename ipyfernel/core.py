@@ -148,7 +148,7 @@ def local(line, cell=None):
 
 # %% ../nbs/00_core.ipynb 23
 @register_line_magic
-def unset_remote(line):
+def unset_remote(_):
     "shutdown remote server"
     unset_sticky('')  # get rid of any input transformers (see below) 
     ipf_shutdown()
@@ -157,8 +157,8 @@ def unset_remote(line):
 gip = get_ipython()
 
 @register_line_magic
-def set_sticky(line):
-    """Adds execute remotely to input transformer list (if it's not there already).  WARNING: Can break solveit"""
+def set_sticky(_):
+    "Makes code cells execute remotely, via input transformer"
     assert _ipf_kc is not None, "Need an active remote kernel connection" 
     for f in gip.input_transformers_cleanup[:]:   # gaurd against appending twice
         if getattr(f, '__name__', '') == '_execute_remotely':
@@ -169,7 +169,8 @@ def set_sticky(line):
 
 # %% ../nbs/00_core.ipynb 26
 @register_line_magic
-def unset_sticky(line):
+def unset_sticky(_):
+    "Un-sticks remote execution for code cells" 
     for f in gip.input_transformers_cleanup[:]:  
         if getattr(f, '__name__', '') == '_execute_remotely':
             gip.input_transformers_cleanup.remove(f)
