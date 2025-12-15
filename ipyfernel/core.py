@@ -12,7 +12,7 @@ import base64
 from pathlib import Path
 from IPython.core.magic import register_line_magic, register_line_cell_magic
 
-# %% ../nbs/00_core.ipynb 6
+# %% ../nbs/00_core.ipynb 7
 def set_ssh_config(
     port:int,                           # the port on the proxy server (bore.pub)
     user:str="",                        # username on remote machine
