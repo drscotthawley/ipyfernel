@@ -115,4 +115,7 @@ div.description {
   border-top: none !important;
 }
 
+.nav-footer, .nav-footer-center, .nav-footer-left, .nav-footer-right {
+  background-color: #171717 !important;
+}
 
