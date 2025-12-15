@@ -5,7 +5,7 @@
 
 ### Choice of Name
 
-It’s remote kernel, right? So this is a play on words, `ipykernel` + the
+It’s a remote kernel, so this is a play on words: `ipykernel` + the
 German word/prefix “fern” meaning “remote” as in Fernseher for
 television (lit: “remote viewer”). Plus maybe it sounds a bit like
 “infernal,” which is 🔥
