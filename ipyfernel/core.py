@@ -6,6 +6,7 @@
 __all__ = ['set_ssh_config']
 
 # %% ../nbs/00_core.ipynb 3
+#| eval: false
 from jupyter_client.manager import KernelManager
 from IPython.display import display, Image
 import base64
