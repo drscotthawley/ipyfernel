@@ -1,0 +1,9 @@
+project:
+  output-dir: _docs
+
+website:
+  title: "ipyfernel"
+  site-url: "https://shawley.github.io/ipyfernel"
+  description: "Remote execution of solveit/jupyter cells"
+  repo-branch: main
+  repo-url: "https://github.com/shawley/ipyfernel"
