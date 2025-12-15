@@ -5,5 +5,4 @@ d = { 'settings': { 'branch': 'main',
                 'doc_host': 'https://drscotthawley.github.io',
                 'git_url': 'https://github.com/drscotthawley/ipyfernel',
                 'lib_path': 'ipyfernel'},
-  'syms': { 'ipyfernel.core': { 'ipyfernel.core.local': ('core.html#local', 'ipyfernel/core.py'),
-                                'ipyfernel.core.set_ssh_config': ('core.html#set_ssh_config', 'ipyfernel/core.py')}}}
+  'syms': {'ipyfernel.core': {'ipyfernel.core.local': ('core.html#local', 'ipyfernel/core.py')}}}
