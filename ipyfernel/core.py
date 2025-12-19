@@ -172,7 +172,7 @@ def remote(line, cell=None):
     "remote exeuction: works as %remote and as %%remote" 
     ipf_exec(cell if cell else line)
 
-# %% ../nbs/00_core.ipynb 24
+# %% ../nbs/00_core.ipynb 25
 @register_line_cell_magic
 def local(line, cell=None):
     "local execution: works as %local and as %%local"
@@ -180,7 +180,7 @@ def local(line, cell=None):
     _skip_next = True
     get_ipython().run_cell(cell if cell else line) 
 
-# %% ../nbs/00_core.ipynb 27
+# %% ../nbs/00_core.ipynb 29
 gip = get_ipython()
 
 def set_sticky():
@@ -193,7 +193,7 @@ def set_sticky():
     gip.input_transformers_cleanup.append(_execute_remotely)
     print('Code cells will now execute remotely.')
 
-# %% ../nbs/00_core.ipynb 28
+# %% ../nbs/00_core.ipynb 30
 def unset_sticky():
     "Un-sticks remote execution for code cells" 
     for f in gip.input_transformers_cleanup[:]:  
