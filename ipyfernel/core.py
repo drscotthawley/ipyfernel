@@ -23,6 +23,7 @@ def set_ssh_config(
     proxyname="bore.pub",           # Have tested this with bore
     config_path="~/.ssh/config",    # Shouldn't need to change this.
     ):
+    "sets up user's ssh .config file with info used later"
     config_path = Path(config_path).expanduser()
     if not config_path.exists(): config_path.touch()
     text = config_path.read_text()
@@ -58,14 +59,15 @@ Host {alias}
 
 # %% ../nbs/00_core.ipynb 8
 def register_remote_kernel(
+    remote_python="/path/to/python",   # Full path of Python executable to run on remote system.
     kernel_name="ipyf_remote_kernel",  # Any old name will do. This is fine.
     display_name="Remote Python",      # This is just what you'll see when you look at a list.
-    remote_python="/path/to/python",  # Full path of Python executable to run on remote system.
     ssh_host_alias="remote_server_sshpyk", # Same alias as was used in writing to ssh config file.
     remote_kernel_name="python3",      # Typical for Jupiter.
     language="python",                 # Probably want to leave this unless you want to try R.
     verbose=True                       # Print extra info.
     ):
+    "registers remote python kernel"
     ksm = KernelSpecManager()
     registered_names = list(ksm.get_all_specs().keys())
     if kernel_name in registered_names: 
@@ -79,7 +81,7 @@ def register_remote_kernel(
         if verbose: print("Success.")
 
 
-# %% ../nbs/00_core.ipynb 10
+# %% ../nbs/00_core.ipynb 11
 _ipf_km, _ipf_kc = None, None            # "ipf" = "ipyfernel" ;-) 
 def ipf_startup(kernel_name="ipyf_remote_kernel"):  
     "Start up the remote kernel"
@@ -94,7 +96,7 @@ def ipf_startup(kernel_name="ipyf_remote_kernel"):
     else: 
         print("ipf_startup: already running")
 
-# %% ../nbs/00_core.ipynb 12
+# %% ../nbs/00_core.ipynb 13
 def _output_hook(
     msg,   #  Message obtained from remote execution
     ):
@@ -112,7 +114,7 @@ def _output_hook(
         elif "text/plain" in data:
             print(data["text/plain"])
 
-# %% ../nbs/00_core.ipynb 13
+# %% ../nbs/00_core.ipynb 14
 def ipf_exec(
     code:str,           # Code to be executed
     verbose=False,      # Return details about remote execution.
@@ -123,7 +125,7 @@ def ipf_exec(
     _ipf_kc.last_result = result  # stash it for optional inspection later
     if verbose: return result
 
-# %% ../nbs/00_core.ipynb 15
+# %% ../nbs/00_core.ipynb 16
 def ipf_shutdown(verbose=True):
     "Terminates the remote kernel"
     global _ipf_km, _ipf_kc
@@ -134,7 +136,7 @@ def ipf_shutdown(verbose=True):
     except: pass  # Don't hang on errors
     _ipf_km, _ipf_kc = None, None
 
-# %% ../nbs/00_core.ipynb 17
+# %% ../nbs/00_core.ipynb 19
 def set_remote(port, user=""):
     """Setup connection to remote server, start remote server, and enable 'sticky' remote execution of code cells (even without magics)."""
     set_ssh_config(port, user=user) 
@@ -144,13 +146,13 @@ def set_remote(port, user=""):
         print(f"Error starting up remote kernel: {e}") 
         return 
 
-# %% ../nbs/00_core.ipynb 19
+# %% ../nbs/00_core.ipynb 21
 def unset_remote():
     "shutdown remote server"
     unset_sticky()  # get rid of any input transformers (see below) 
     ipf_shutdown()
 
-# %% ../nbs/00_core.ipynb 21
+# %% ../nbs/00_core.ipynb 23
 _skip_next = False  # This is used in conjunction with %%local, below
 
 def _execute_remotely(lines:list[str]):
@@ -166,13 +168,13 @@ def _execute_remotely(lines:list[str]):
         return lines
     return [f"ipf_exec({repr(code)})\n"]
 
-# %% ../nbs/00_core.ipynb 22
+# %% ../nbs/00_core.ipynb 24
 @register_line_cell_magic
 def remote(line, cell=None):
     "remote exeuction: works as %remote and as %%remote" 
     ipf_exec(cell if cell else line)
 
-# %% ../nbs/00_core.ipynb 25
+# %% ../nbs/00_core.ipynb 27
 @register_line_cell_magic
 def local(line, cell=None):
     "local execution: works as %local and as %%local"
@@ -180,7 +182,7 @@ def local(line, cell=None):
     _skip_next = True
     get_ipython().run_cell(cell if cell else line) 
 
-# %% ../nbs/00_core.ipynb 29
+# %% ../nbs/00_core.ipynb 31
 gip = get_ipython()
 
 def set_sticky():
@@ -193,7 +195,7 @@ def set_sticky():
     gip.input_transformers_cleanup.append(_execute_remotely)
     print('Code cells will now execute remotely.')
 
-# %% ../nbs/00_core.ipynb 30
+# %% ../nbs/00_core.ipynb 32
 def unset_sticky():
     "Un-sticks remote execution for code cells" 
     for f in gip.input_transformers_cleanup[:]:  
