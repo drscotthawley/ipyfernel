@@ -136,7 +136,7 @@ def ipf_shutdown(verbose=True):
     except: pass  # Don't hang on errors
     _ipf_km, _ipf_kc = None, None
 
-# %% ../nbs/00_core.ipynb 19
+# %% ../nbs/00_core.ipynb 20
 def start_remote(port, user=""):
     "Configure ssh connection to remote server and start remote server"
     set_ssh_config(port, user=user) 
@@ -146,13 +146,13 @@ def start_remote(port, user=""):
         print(f"Error starting up remote kernel: {e}") 
         return 
 
-# %% ../nbs/00_core.ipynb 21
+# %% ../nbs/00_core.ipynb 22
 def stop_remote():
     "shutdown remote server"
     unset_sticky()  # get rid of any input transformers (see below) 
     ipf_shutdown()
 
-# %% ../nbs/00_core.ipynb 24
+# %% ../nbs/00_core.ipynb 25
 _skip_next = False  # This is used in conjunction with %%local, below
 
 def _execute_remotely(lines:list[str]):
@@ -168,13 +168,13 @@ def _execute_remotely(lines:list[str]):
         return lines
     return [f"ipf_exec({repr(code)})\n"]
 
-# %% ../nbs/00_core.ipynb 25
+# %% ../nbs/00_core.ipynb 26
 @register_line_cell_magic
 def remote(line, cell=None):
     "remote exeuction: works as %remote and as %%remote" 
     ipf_exec(cell if cell else line)
 
-# %% ../nbs/00_core.ipynb 28
+# %% ../nbs/00_core.ipynb 29
 @register_line_cell_magic
 def local(line, cell=None):
     "local execution: works as %local and as %%local"
@@ -182,7 +182,7 @@ def local(line, cell=None):
     _skip_next = True
     get_ipython().run_cell(cell if cell else line) 
 
-# %% ../nbs/00_core.ipynb 32
+# %% ../nbs/00_core.ipynb 33
 gip = get_ipython()
 
 def set_sticky():
@@ -195,7 +195,7 @@ def set_sticky():
     gip.input_transformers_cleanup.append(_execute_remotely)
     print('Code cells will now execute remotely.')
 
-# %% ../nbs/00_core.ipynb 33
+# %% ../nbs/00_core.ipynb 34
 def unset_sticky():
     "Un-sticks remote execution for code cells" 
     for f in gip.input_transformers_cleanup[:]:  
