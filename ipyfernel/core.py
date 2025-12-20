@@ -163,8 +163,8 @@ def _execute_remotely(lines:list[str]):
         return lines
     code = ''.join(lines)
     if 'get_ipython()' in code: return lines  # let solveit internals pass through
-    # Make sure our magics execute locally
-    if code.strip().startswith(('%local', '%%local', 'unset_remote(', 'set_remote(', 'set_sticky(','unset_sticky(')):
+    # Make sure our controls execute locally
+    if code.strip().startswith(('%local', '%%local', 'start_remote(', 'stop_remote(', 'set_remote(', 'unset_remote(', 'set_sticky(','unset_sticky(')):
         return lines
     return [f"ipf_exec({repr(code)})\n"]
 
