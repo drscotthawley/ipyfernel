@@ -1,0 +1,121 @@
+/* === INFERNAL FIRE THEME === */
+
+/* Dark background everywhere */
+body, .page-layout, .page-columns, .column-body, .column-page {
+  background-color: #171717 !important;
+  color: #f0f0f0;
+}
+
+/* Sidebar - match background */
+.sidebar, .sidebar-navigation, #quarto-sidebar {
+  background-color: #171717 !important;
+  border-right: none !important;
+}
+
+/* Right-hand TOC panel */
+#quarto-margin-sidebar, .toc-actions, #TOC {
+  background-color: #171717 !important;
+  border-left: none !important;
+}
+
+/* Top navbar - deep orange with white text */
+.navbar {
+  background-color: #be5006 !important;
+  border-bottom: 3px solid #a34210;
+}
+
+.navbar-brand, .navbar-nav .nav-link, .navbar-title {
+  color: #fff !important;
+}
+
+.navbar-nav .nav-link:hover {
+  color: #ffcc00 !important;
+}
+
+/* Hyperlinks - warm orange, hover to yellow */
+a {
+  color: #e67e22;
+}
+
+a:hover {
+  color: #f1c40f;
+}
+
+/* Inline code - dark background, no gray box */
+code {
+  background-color: #2d2d2d !important;
+  color: #f8f8f2;
+}
+
+/* Code blocks */
+pre {
+  background-color: #2d2d2d !important;
+  color: #f8f8f2;
+}
+
+.cell-output > pre, .cell-output > .sourceCode > pre, .cell-output-stdout > pre {
+  border-left: 2px solid #e74c3c;
+  margin-left: 0.8rem;
+  margin-top: 0;
+  background: #2d2d2d !important;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+/* Cell styling */
+.cell {
+  margin-bottom: 1rem;
+}
+
+.cell > .sourceCode {
+  margin-bottom: 0;
+}
+
+.cell-output > pre {
+  margin-bottom: 0;
+}
+
+.cell-output > .sourceCode {
+  border: none;
+  background: none;
+  margin-top: 0;
+}
+
+div.description {
+  padding-left: 2px;
+  padding-top: 5px;
+  font-style: italic;
+  font-size: 135%;
+  opacity: 70%;
+}
+
+
+/* TOC anchor links */
+#TOC a, .toc-actions a, #quarto-margin-sidebar a {
+  color: #e67e22 !important;
+}
+
+#TOC a:hover, .toc-actions a:hover, #quarto-margin-sidebar a:hover {
+  color: #f1c40f !important;
+}
+
+
+/* Left sidebar links */
+.sidebar a, .sidebar-item a, .sidebar-navigation a {
+  color: #e67e22 !important;
+}
+
+/* TOC active indicator line */
+#TOC .active, #TOC .toc-active, .toc-active {
+  border-left-color: #e67e22 !important;
+}
+
+.page-footer, footer {
+  background-color: #171717 !important;
+  border-top: none !important;
+}
+
+.nav-footer, .nav-footer-center, .nav-footer-left, .nav-footer-right {
+  background-color: #171717 !important;
+}
+
