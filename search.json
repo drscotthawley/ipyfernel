@@ -1,0 +1,122 @@
+[
+  {
+    "objectID": "core.html",
+    "href": "core.html",
+    "title": "core",
+    "section": "",
+    "text": "The remote kernel needs to be speified by the user. The SSH config will typically be called by other routines since the port is usually changing each time.\n\nsource\n\n\n\ndef register_remote_kernel(\n    remote_python:str='/path/to/python', # Full path of Python executable to run on remote system.\n    kernel_name:str='ipyf_remote_kernel', # Any old name will do. This is fine.\n    display_name:str='Remote Python', # This is just what you'll see when you look at a list.\n    ssh_host_alias:str='remote_server_sshpyk', # Same alias as was used in writing to ssh config file.\n    remote_kernel_name:str='python3', # Typical for Jupiter.\n    language:str='python', # Probably want to leave this unless you want to try R.\n    verbose:bool=True, # Print extra info.\n):\n\nregisters which python kernel will be used on remote machine\n\nregister_remote_kernel(remote_python='/Users/shawley/exercises/solveit/.venv/bin/python')\n\nipyf_remote_kernel is already a registered kernel\n\n\n\nsource\n\n\n\n\ndef set_ssh_config(\n    port:int, # Port number on proxy server (e.g. bore.pub)\n    user:str='', # Username on remote system.\n    alias:str='remote_server_sshpyk', # Default alias for `sshpyk`, leave it alone\n    proxyname:str='bore.pub', # Have tested this with bore\n    config_path:str='~/.ssh/config', # Shouldn't need to change this.\n):\n\n(called by ipf_startup) sets up user’s ssh .config file with info used later\n\n# Demo that:\n# On remote machine run:  bore local 22 --to bore.pub\n# Take that port and put it here\nport = 3365\nset_ssh_config(port)\n\n/app/data/.ssh/config file updated.",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#start-and-stop-remote-kernel",
+    "href": "core.html#start-and-stop-remote-kernel",
+    "title": "core",
+    "section": "Start and Stop Remote Kernel",
+    "text": "Start and Stop Remote Kernel\n\nsource\n\nstart_remote\n\ndef start_remote(\n    port, user:str=''\n):\n\nConfigure ssh connection to remote server and start remote server\n\nstart_remote(port)\n\n/app/data/.ssh/config file updated.\nSuccess: remote kernel started\n\n\n\nsource\n\n\nstop_remote\n\ndef stop_remote(\n    \n):\n\nshutdown remote server",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#ipython-magics",
+    "href": "core.html#ipython-magics",
+    "title": "core",
+    "section": "iPython Magics",
+    "text": "iPython Magics\nThese line or cell magics, invoked via ‘%’ or ‘%%’ respectively, will direct execution of a line or cell to occur on the appropriate system – “remote” or “local”, where local means in the current notebook.\n\nsource\n\nremote\n\ndef remote(\n    line, cell:NoneType=None\n):\n\nremote exeuction: works as %remote and as %%remote\n\n#%%remote    &lt;-- docs are filtering magics but that's what's used here\nimport socket \nhostname = socket.gethostname()   # let's make sure we're running remotely\nprint(\"Hello from\",hostname)\n\nHello from Chonk\n\n\n^ “Chonk” is the name of my home laptop\n\nsource\n\n\nlocal\n\ndef local(\n    line, cell:NoneType=None\n):\n\nlocal execution: works as %local and as %%local\n\n#%%local &lt;-- docs are filtering magics but that's what's used here\nimport socket \nhostname = socket.gethostname()   # let's make sure we're running remotely\nprint(\"Hello from\",hostname)\n\nHello from 549d6fca895f\n\n\n^“549d6fca895f” happens to be the name of the solvent instance currently running.",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "core.html#stickyseamless-remote-excution",
+    "href": "core.html#stickyseamless-remote-excution",
+    "title": "core",
+    "section": "‘Sticky’/‘Seamless’ Remote Excution",
+    "text": "‘Sticky’/‘Seamless’ Remote Excution\nvia Input Transformers. These can make cells set execute remotely by default.\nWARNINGS: 1. Solve it is not intended to work with people modifying input transformers So be wary. Nevertheless, this seems to work. 2. If they’re commands that you definitely want to execute locally, maybe run %unset_sticky just to be sure first.\n\nsource\n\nset_sticky\n\ndef set_sticky(\n    \n):\n\nMakes code cells execute remotely, via input transformer\n\nsource\n\n\nunset_sticky\n\ndef unset_sticky(\n    \n):\n\nUn-sticks remote execution for code cells\n\nstop_remote()\n\nprint()\nstart_remote(port)\nset_sticky()\n\nCode cells will now run locally.\nShutting down remote kernel\n\n/app/data/.ssh/config file updated.\nSuccess: remote kernel started\nCode cells will now execute remotely.\n\n\n\n# remote execution\nimport socket \nhostname = socket.gethostname()\nprint(\"Hello from\",hostname)\n\nHello from Chonk\n\n\n\nunset_sticky()\n\nCode cells will now run locally.\n\n\n\n# local execution\nimport socket \nhostname = socket.gethostname()\nprint(\"Hello from\",hostname)\n\nHello from 549d6fca895f",
+    "crumbs": [
+      "core"
+    ]
+  },
+  {
+    "objectID": "demo.html",
+    "href": "demo.html",
+    "title": "demo",
+    "section": "",
+    "text": "from ipyfernel import *",
+    "crumbs": [
+      "demo"
+    ]
+  },
+  {
+    "objectID": "demo.html#register-the-remote-kernel",
+    "href": "demo.html#register-the-remote-kernel",
+    "title": "demo",
+    "section": "Register the remote kernel",
+    "text": "Register the remote kernel\nRegister which python executable you plan to use on the remote machine:\n\nregister_remote_kernel(remote_python='/Users/shawley/exercises/solveit/.venv/bin/python')\n\nipyf_remote_kernel is already a registered kernel",
+    "crumbs": [
+      "demo"
+    ]
+  },
+  {
+    "objectID": "demo.html#setup-ssh-tcp-proxy",
+    "href": "demo.html#setup-ssh-tcp-proxy",
+    "title": "demo",
+    "section": "Setup SSH TCP Proxy",
+    "text": "Setup SSH TCP Proxy\nMake sure your SSH keys are up to date the following command will create a new key and/or overwrite an old key and print the resulting public key to the screen:\n\n!ssh-keygen -t ed25519 -f ~/.ssh/id_ed25519 -N '' -q -y\n\nssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIISw4Bii/B2kpnxN8Mo782wOFk/hDuLIAgqfmVY1KYHF solveit@e421467f4581\n\n\n\nNOTE: If you stop and start the SolveIt instance, the SSH key will probably go out of date, so you’ll need to run the above command to overwrite the old key.\n\nCopy that output line and paste it into your remote machine’s ~/.ssh/authorized_keys file.\nOn the remote machine, setup a TCP proxy to port 22 (the ssh port) via bore:\nbore local 22 --to bore.pub\n…and note the port it assigns you, e.g. “listening at bore.pub:10807” means your port is 10807. Note that bore.pub ports are only temporary, but this should be fine for a single session.\n\nInstalling bore on your server\nIf bore isn’t installed yet (e.g., on Lambda.ai):\nsudo apt install cargo\ncargo install bore-cli --locked\n/home/ubuntu/.cargo/bin/bore local 22 --to bore.pub\n\n\nQuick Check- Manual SSH\nBefore going on, make sure that you’re able to manually SSH to the remote system.\nIn the Terminal for solveit, try to ssh using your bore port and username on the remote machine:\n ssh -p &lt;port&gt; &lt;username&gt;@bore.pub\nIf that succeeds, you should be ready to go on.",
+    "crumbs": [
+      "demo"
+    ]
+  },
+  {
+    "objectID": "demo.html#start-the-remote-kernel",
+    "href": "demo.html#start-the-remote-kernel",
+    "title": "demo",
+    "section": "Start the Remote Kernel",
+    "text": "Start the Remote Kernel\nNow you should be ready to start the remote kernel:\n\nport, user = 10807, 'shawley'   # bore.pub and remote username\nstart_remote(port, user)\n\n/app/data/.ssh/config file updated.\nSuccess: remote kernel started",
+    "crumbs": [
+      "demo"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "ipyfernel 🔥",
+    "section": "",
+    "text": "IPyfernel allows you to interact with a persistent remote IPython kernel. It will stream text outputs like simple progress bar updates it will communicate error messages seamlessly and image outputs. It allows you to optionally “hijack” the code cell execution via “sticky” mode so that cells execute remotely by default.",
+    "crumbs": [
+      "ipyfernel 🔥"
+    ]
+  },
+  {
+    "objectID": "index.html#developer-guide",
+    "href": "index.html#developer-guide",
+    "title": "ipyfernel 🔥",
+    "section": "Developer Guide",
+    "text": "Developer Guide\nIf you are new to using nbdev here are some useful pointers to get you started.\n\nInstall ipyfernel in Development mode\n# make sure ipyfernel package is installed in development mode\n$ pip install -e .\n\n# make changes under nbs/ directory\n# ...\n\n# compile to have changes apply to ipyfernel\n$ nbdev_prepare",
+    "crumbs": [
+      "ipyfernel 🔥"
+    ]
+  },
+  {
+    "objectID": "index.html#usage",
+    "href": "index.html#usage",
+    "title": "ipyfernel 🔥",
+    "section": "Usage",
+    "text": "Usage\n\nInstallation\nInstall latest from the GitHub repository:\n$ pip install git+https://github.com/drscotthawley/ipyfernel.git\nor from pypi\n$ pip install ipyfernel\n\n\nDocumentation\nDocumentation can be found hosted on this GitHub repository’s pages. Additionally you can find package manager specific guidelines pypi.",
+    "crumbs": [
+      "ipyfernel 🔥"
+    ]
+  },
+  {
+    "objectID": "index.html#how-to-use",
+    "href": "index.html#how-to-use",
+    "title": "ipyfernel 🔥",
+    "section": "How to use",
+    "text": "How to use\nSee the demo for examples.\nTODO: Add more examples!",
+    "crumbs": [
+      "ipyfernel 🔥"
+    ]
+  }
+]
