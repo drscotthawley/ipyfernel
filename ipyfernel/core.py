@@ -10,7 +10,7 @@ __all__ = ['gip', 'register_remote_kernel', 'set_ssh_config', 'ipf_startup', 'ip
 from jupyter_client.manager import KernelManager
 from jupyter_client.kernelspec import KernelSpecManager
 import subprocess 
-from IPython.display import display, Image
+from IPython.display import display, Image, HTML
 import base64
 from pathlib import Path
 from IPython.core.magic import register_line_magic, register_line_cell_magic
@@ -100,20 +100,44 @@ def ipf_startup(kernel_name="ipyf_remote_kernel"):
         print("ipf_startup: already running")
 
 # %% ../nbs/00_core.ipynb #47c22dcd
-def _output_hook(
-    msg,   #  Message obtained from remote execution
-    ):
+_display_handles = {}
+
+def _output_hook(msg):
     "How to handle output from the remote kernel."
     mt = msg["msg_type"]
     content = msg.get("content", {})
     if mt == "stream":
-        print(content["text"], end="", flush=True)
+        import sys
+        out = sys.stderr if content.get("name") == "stderr" else sys.stdout
+        print(content["text"], end="", flush=True, file=out)
     elif mt == "error":
-        print('\n'.join(content.get("traceback", [])))
-    elif mt in ("display_data", "update_display_data"):
+        tb = '\n'.join(content.get("traceback", []))
+        # Convert ANSI escape codes to HTML for clean rendering
+        try:
+            from ansi2html import Ansi2HTMLConverter
+            conv = Ansi2HTMLConverter(inline=True)
+            display(HTML(f"<pre>{conv.convert(tb, full=False)}</pre>"))
+        except ImportError:
+            import re
+            display(HTML(f"<pre>{re.sub(chr(27) + r'\[[0-9;]*[a-zA-Z]', '', tb)}</pre>"))
+    elif mt == "clear_output":
+        from IPython.display import clear_output
+        clear_output(wait=content.get("wait", False))
+    elif mt in ("display_data", "update_display_data", "execute_result"):
         data = content.get("data", {})
-        if "image/png" in data:
+        did = content.get("transient", {}).get("display_id")
+        if "text/html" in data:
+            if mt == "update_display_data" and did and did in _display_handles:
+                _display_handles[did].update(HTML(data["text/html"]))
+            else:
+                handle = display(HTML(data["text/html"]), display_id=did or True)
+                if did: _display_handles[did] = handle
+        elif "image/png" in data:
             display(Image(base64.b64decode(data["image/png"])))
+        elif "image/jpeg" in data:
+            display(Image(base64.b64decode(data["image/jpeg"])))
+        elif "image/svg+xml" in data:
+            display(HTML(data["image/svg+xml"]))
         elif "text/plain" in data:
             print(data["text/plain"])
 
@@ -138,6 +162,7 @@ def ipf_shutdown(verbose=True):
         if _ipf_km is not None: _ipf_km.shutdown_kernel(now=True)  # 'now=True' forces immediate shutdown
     except: pass  # Don't hang on errors
     _ipf_km, _ipf_kc = None, None
+    _display_handles.clear()
 
 # %% ../nbs/00_core.ipynb #252850fa
 def _setup_tunnels(remote_ports, ssh_host="remote_server_sshpyk"):
